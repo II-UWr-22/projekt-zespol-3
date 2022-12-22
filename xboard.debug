@@ -1,0 +1,91 @@
+locale = C.UTF-8
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+recognized 'normal' (-1) as variant normal
+shuffleOpenings = 0
+shuffleOpenings = 0
+Version: xboard 4.9.1 + main ()
+Reset(1, 0) from gameMode 0
+recognized 'normal' (-1) as variant normal
+GameEnds(0, (null), 2)
+shuffleOpenings = 0
+StartChildProcess (dir=".") ./main
+369 >first : xboard
+protover 2
+382 <first : feature reuse=0
+383 >first : accepted reuse
+384 <first : feature sigint=0
+384 >first : accepted sigint
+385 <first : feature name=Zespol3
+386 >first : accepted name
+386 <first : feature variants="crazyhouse"
+389 >first : accepted variants
+389 <first : feature debug=1
+390 >first : accepted debug
+391 <first : feature done=1
+391 >first : accepted done
+recognized 'crazyhouse' (-1) as variant crazyhouse
+Reset(1, 0) from gameMode 0
+recognized 'crazyhouse' (-1) as variant crazyhouse
+GameEnds(0, (null), 2)
+395 >first : quit
+shuffleOpenings = 0
+StartChildProcess (dir=".") ./main
+496 >first : xboard
+protover 2
+497 >first : new
+random
+498 >first : variant crazyhouse
+498 >first : level 40 5 0
+499 >first : post
+500 >first : hard
+508 <first : feature reuse=0
+509 >first : accepted reuse
+510 <first : feature sigint=0
+511 >first : accepted sigint
+512 <first : feature name=Zespol3
+512 >first : accepted name
+513 <first : feature variants="crazyhouse"
+513 >first : accepted variants
+514 <first : feature debug=1
+514 >first : accepted debug
+515 <first : feature done=1
+515 >first : accepted done
+516 <first : move p
+Ignoring extra move from first
+517 <first : move hhre
+Ignoring extra move from first
+nps: w=-1, b=-1
+nps: w=-1, b=-1
+4971 >first : time 30000
+4972 >first : otim 30000
+book hit = (NULL)
+4974 >first : b2b4
+5054 <first : move b7b5
+6513 >first : time 29991
+6514 >first : otim 29854
+book hit = (NULL)
+6516 >first : a2a4
+6597 <first : move a7a5
+7794 >first : time 29983
+7795 >first : otim 29734
+book hit = (NULL)
+7798 >first : a4b5
+7876 <first : move a5b4
+9055 >first : time 29974
+9056 >first : otim 29616
+book hit = (NULL)
+9058 >first : b5b6
+9138 <first : move b4b3
+10326 >first : time 29966
+10327 >first : otim 29498
+book hit = (NULL)
+10329 >first : b6b7
+10409 <first : move b3b2
+11379 >first : time 29958
+11380 >first : otim 29401
+book hit = (NULL)
+11380 >first : b7c8q
+GameEnds(29, xboard exit, 2)
+45820 >first : result * {xboard exit}
+45820 >first : quit
