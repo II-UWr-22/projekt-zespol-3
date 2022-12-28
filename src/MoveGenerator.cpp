@@ -54,6 +54,26 @@ void MoveGenerator::generateKingMoves(pair<int, int> square) {
 
 void MoveGenerator::generateKnightMoves(pair<int, int> square) {
     // Szymon
+    
+    int row = square.first, column = square.second;
+    
+    int X[] = {-2, -2, 2, 2, -1, 1, -1, 1};
+    int Y[] = {1, -1, 1, -1, 2, 2, -2, -2};
+    
+    for(int i=0; i<8; i++){
+        int row_after = row + X[i], column_after = column + Y[i];
+
+        if(!inBounds({row_after, column_after})) continue;
+        
+        if(board[row_after][column_after] == Piece::None){
+            Move move = Move(row, column, row_after, column_after);
+            moves.push_back(move);
+        }
+        else if(Piece::color(board[row_after][column_after]) != friendlyColor){
+            Move move = Move(row, column, row_after, column_after);
+            moves.push_back(move);
+        }
+    }
 }
 
 void MoveGenerator::generateStraightMoves(pair<int, int> square) {
@@ -258,4 +278,3 @@ bool MoveGenerator::inBounds(pair<int, int> square) {
     int row = square.first, column = square.second;
     return (row >= 0 && row <= 7 && column >= 0 && column <= 7);
 }
-
