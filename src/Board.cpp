@@ -30,7 +30,27 @@ void Board::makeMove(Move& move) {
 }
 
 void Board::loadPositionFromFen(const string& fen) {
-
+    int col = 0;
+    int row = 0;
+    
+    const int board_fen_end = fen.find(' ');
+    for (int i = 0; i < board_fen_end; i++){
+        if (fen[i] == '/') {
+            row++;
+            col = 0;
+        }
+        else if ('0' <= fen[i] and fen[i] <= '9') {
+            col += (int)(fen[i] - '0');
+        }
+        else if ('a' <= fen[i] and fen[i] <= 'z') {
+            _board[row][col] = Piece::Black | Piece::pieceSymbol.at(fen[i]);
+            col++;
+        }
+        else if ('A' <= fen[i] and fen[i] <= 'Z') {
+            _board[row][col] = Piece::Black | Piece::pieceSymbol.at(fen[i] + ((int)'a' - (int)'A'));
+            col++;
+        }
+    }
 }
 
 array<int, 8> Board::operator[](int row) {
