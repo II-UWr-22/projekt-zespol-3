@@ -12,11 +12,77 @@ void MoveGenerator::generateKnightMoves(pair<int, int> square) {
 void MoveGenerator::generateStraightMoves(pair<int, int> square) {
     // Rooks and Queen
     // Kalina
+    int row, column, ROW = square.first, COLUMN = square.second;
+    int RowChange[4] = {1, 0, -1, 0};
+    int ColumnChange[4] = {0, -1, 0, 1};
+
+    for (int i = 0; i < 4; i++) {
+        int rowChange = RowChange[i];
+        int columnChange = ColumnChange[i];
+        row = ROW;
+        column = COLUMN;
+        while (1) {
+            if (inBounds({ row + rowChange, column + columnChange })) {
+                if (board[row + rowChange][column + columnChange] == Piece::None) {
+                    Move move = Move(ROW, COLUMN, row + rowChange, column + columnChange);
+                    moves.push_back(move);
+                }
+                else {
+                    if (Piece::color(board[row + rowChange][column + columnChange]) != friendlyColor) {
+                        Move move = Move(ROW, COLUMN, row + rowChange, column + columnChange);
+                        moves.push_back(move);
+                        break;
+                    }
+                    else
+                        break;
+                }
+            }
+            else
+                break;
+
+            row += rowChange;
+            column += columnChange;
+        }
+
+    }
 }
 
 void MoveGenerator::generateDiagonalMoves(pair<int, int> square) {
     // Bishops and Queen
     // Kalina
+    int row, column, ROW = square.first, COLUMN = square.second;
+    int RowChange[4] = { 1, 1, -1, -1 };
+    int ColumnChange[4] = { 1, -1, -1, 1 };
+
+    for (int i = 0; i < 4; i++) {
+        int rowChange = RowChange[i];
+        int columnChange = ColumnChange[i];
+        row = ROW;
+        column = COLUMN;
+        while (1) {
+            if (inBounds({ row + rowChange, column + columnChange })) {
+                if (board[row + rowChange][column + columnChange] == Piece::None) {
+                    Move move = Move(ROW, COLUMN, row + rowChange, column + columnChange);
+                    moves.push_back(move);
+                }
+                else {
+                    if (Piece::color(board[row + rowChange][column + columnChange]) != friendlyColor) {
+                        Move move = Move(ROW, COLUMN, row + rowChange, column + columnChange);
+                        moves.push_back(move);
+                        break;
+                    }
+                    else
+                        break;
+                }
+            }
+            else
+                break;
+
+            row += rowChange;
+            column += columnChange;
+        }
+
+    }
 }
 
 void MoveGenerator::generatePawnMoves(pair<int, int> square) {
