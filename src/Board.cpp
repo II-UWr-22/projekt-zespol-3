@@ -33,7 +33,7 @@ void Board::loadPositionFromFen(const string& fen) {
     int col = 0;
     int row = 0;
     
-    const int board_fen_end = fen.find(' ');
+    const int board_fen_end = fen.find(' ') == string::npos ? fen.size() : fen.find(' ');
     for (int i = 0; i < board_fen_end; i++){
         if (fen[i] == '/') {
             row++;
@@ -47,9 +47,16 @@ void Board::loadPositionFromFen(const string& fen) {
             col++;
         }
         else if ('A' <= fen[i] and fen[i] <= 'Z') {
-            _board[row][col] = Piece::Black | Piece::pieceSymbol.at(fen[i] + ((int)'a' - (int)'A'));
+            _board[row][col] = Piece::White | Piece::pieceSymbol.at(fen[i] + ((int)'a' - (int)'A'));
             col++;
         }
+    }
+
+    if (board_fen_end + 1 < (int)fen.size()) {
+        if (fen[board_fen_end + 1] == 'w')
+            colorToMove = Piece::White;
+        else
+            colorToMove = Piece::Black;
     }
 }
 
