@@ -15,21 +15,7 @@ public:
     static const int Black = 16;
 
 
-    // Work around declaring static const map because c++ won't let you
     static const map<char, int> pieceSymbol;
-    static map<char,int> createMap()
-    {
-        map<char, int> m = {
-                {'p', Piece::Pawn},
-                {'r', Piece::Rook},
-                {'n', Piece::Knight},
-                {'b', Piece::Bishop},
-                {'q', Piece::Queen},
-                {'k', Piece::King}
-        };
-        return m;
-    }
-
 
 private:
     static const int typeMask = 0b00111;
