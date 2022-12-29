@@ -254,24 +254,88 @@ vector<Move> MoveGenerator::generateMoves(const Board &p_board) {
     generatePseudoLegalMoves();
 
     // Piotrek
+    vector<int> ROW, COLUMN;
+    if(friendlyColor == Piece::White) ROW = {7,6,5,4,3,2,1,0}, COLUMN = {4,3,5,2,6,1,7,0};
+    else ROW = {0,1,2,3,4,5,6,7}, COLUMN = {3,4,2,5,1,6,0,7};
+    vector<bool> llegal(moves.size());
+    int it = 0;
     for(Move &move : moves){
         // No need to check if castling was correct
         Board copy_board = board;
         copy_board.makeMove(move);
         // find king in copy_board and check if it is not checked
+        int rowKing = -1, columnKing = -1;
+        
+        for(int row : ROW) {
+            for(int column : COLUMN) {
+                if(copy_board[row][column] == Piece::King &&
+                Piece::color(copy_board[row][column]) == friendlyColor ) rowKing = row, columnKing = column;
+                if(rowKing != -1 && columnKing != -1) break;
+            }
+            if(rowKing != -1 && columnKing != -1) break;
+        }
+        if(MoveGenerator::isSquareThreatened({rowKing, columnKing}, copy_board) == true) llegal[it] = false;
+        else llegal[it] = true;
+        it++;
     }
 
-    return moves;
+    vector<Move> moves2;
+    for(int i = 0; i < moves.size(); i++){
+        if(llegal[i]) moves2.push_back(moves[i]);
+    }
+
+    return moves2;
 }
 
 bool MoveGenerator::isSquareThreatened(pair<int, int> square, Board& board) {
     int row = square.first, column = square.second;
-    int piece = board[row][column];
-    int color = Piece::color(piece);
-    // Piotrek
+    bool answer = false;
 
+    //checking for pawns
+    int change = friendlyColor == Piece::White? -1 : 1;
+    if(inBounds({row+change, column+1}) && board[row+change][column+1] == Piece::Pawn
+    && Piece::color(board[row+change][column+1]) != friendlyColor ) answer = 1;
 
-    return false;
+    if(inBounds({row+change, column-1}) && board[row+change][column-1] == Piece::Pawn
+    && Piece::color(board[row+change][column-1]) != friendlyColor ) answer = 1;
+
+    //checking for king
+    vector<pair<int, int>> directions{{0,1},{1,0},{-1,0},{0,-1},{1,1},{1,-1},{-1,1},{-1,-1}};
+    for(auto current : directions) {
+        int currentRow = row+current.first, currentColumn = column+current.second; 
+        if(inBounds({currentRow, currentColumn}) && board[currentRow][currentColumn] == Piece::King 
+        && Piece::color(board[currentRow][currentColumn]) != friendlyColor) answer = 1;
+    }
+    //checking for knights
+    directions.clear();
+    directions = {{2,1},{1,2},{-1,2},{-2,1},{-2,-1},{-1,-2},{1,-2},{2,-1}};
+    for(auto current : directions) {
+        int currentRow = row+current.first, currentColumn = column+current.second; 
+        if(inBounds({currentRow, currentColumn}) && board[currentRow][currentColumn] == Piece::Knight 
+        && Piece::color(board[currentRow][currentColumn]) != friendlyColor) answer = 1;
+    }
+    //checking for bishops/queen
+    directions.clear();
+    directions = {{1,1},{1,-1},{-1,1},{-1,-1}};
+    for(auto current : directions) {
+        int currentRow = row+current.first, currentColumn = column+current.second;
+        while(inBounds({currentRow, currentColumn}) && board[currentRow][currentColumn] == Piece::None)
+            currentRow += current.first, currentColumn += current.second;
+        if(inBounds({currentRow, currentColumn}) && Piece::color(board[currentRow][currentColumn]) != friendlyColor &&
+        (board[currentRow][currentColumn] == Piece::Bishop || board[currentRow][currentColumn] == Piece::Queen)) answer = 1;
+    }
+    //checking for rooks/queen
+    directions.clear();
+    directions = {{1,0},{-1,0},{0,1},{0,-1}};
+    for(auto current : directions) {
+        int currentRow = row+current.first, currentColumn = column+current.second;
+        while(inBounds({currentRow, currentColumn}) && board[currentRow][currentColumn] == Piece::None)
+            currentRow += current.first, currentColumn += current.second;
+        if(inBounds({currentRow, currentColumn}) && Piece::color(board[currentRow][currentColumn]) != friendlyColor &&
+        (board[currentRow][currentColumn] == Piece::Rook || board[currentRow][currentColumn] == Piece::Queen)) answer = 1;
+    }
+
+    return answer;
 }
 
 bool MoveGenerator::inBounds(pair<int, int> square) {
