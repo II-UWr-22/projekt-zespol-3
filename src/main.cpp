@@ -10,7 +10,7 @@ int main()
         std::cin >> move;
         game.makeMove(move);
         std::string response = game.getMove();
-        // std::cout << response << std::endl;
-        // game.makeMove(response);
+        std::cout << response << std::endl;
+        game.makeMove(response);
     }
 }
