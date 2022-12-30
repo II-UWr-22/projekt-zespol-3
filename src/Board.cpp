@@ -23,6 +23,8 @@ void Board::makeMove(Move& move) {
                 _board[move.secondaryMove->startingSquare.first][move.secondaryMove->startingSquare.second];
         _board[move.secondaryMove->startingSquare.first][move.secondaryMove->startingSquare.second] = Piece::None;
     }
+    if(move.promotion != Piece::None)
+        _board[move.targetSquare.first][move.targetSquare.second] = move.promotion;
     colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
     lastMove = move;
     hasMoved[move.startingSquare.first][move.startingSquare.second] = true;

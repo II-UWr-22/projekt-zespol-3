@@ -156,24 +156,54 @@ void MoveGenerator::generatePawnMoves(pair<int, int> square) {
     // Instead of checking color in loops we add change to row so -1 for white pawn and 1 for black pawns
     int change = friendlyColor == Piece::White ? -1 : 1;
 
-    // Move forward if there is nothing in front
+    int finalRow = friendlyColor == Piece::White ? 0 : 7;
+    // Move forward if there is nothing in front and promote if final row
     if(inBounds({row+change, column}) && board[row+change][column] == Piece::None) {
-        Move move = Move(row, column, row + change, column);
-        moves.push_back(move);
+        if(row + change == finalRow){
+            for(int piece = Piece::Knight; piece <= Piece::Queen; piece++){
+                Move move = Move(row, column, row + change, column);
+                move.promotion = piece | friendlyColor;
+                moves.push_back(move);
+            }
+        }
+        else
+        {
+            Move move = Move(row, column, row + change, column);
+            moves.push_back(move);
+        }
     }
 
     // Capture 1
     if(inBounds({row+change, column+1}) && board[row+change][column+1] != Piece::None &&
     Piece::color(board[row+change][column+1]) != friendlyColor) {
-        Move move = Move(row, column, row + change, column+1);
-        moves.push_back(move);
+        if(row + change == finalRow){
+            for(int piece = Piece::Knight; piece <= Piece::Queen; piece++){
+                Move move = Move(row, column, row + change, column+1);
+                move.promotion = piece | friendlyColor;
+                moves.push_back(move);
+            }
+        }
+        else{
+            Move move = Move(row, column, row + change, column+1);
+            moves.push_back(move);
+        }
     }
 
     // Capture 2
     if(inBounds({row+change, column-1}) && board[row+change][column-1] != Piece::None &&
        Piece::color(board[row+change][column-1]) != friendlyColor) {
-        Move move = Move(row, column, row + change, column-1);
-        moves.push_back(move);
+        if(row + change == finalRow){
+            for(int piece = Piece::Knight; piece <= Piece::Queen; piece++){
+                Move move = Move(row, column, row + change, column-1);
+                move.promotion = piece | friendlyColor;
+                moves.push_back(move);
+            }
+        }
+        else{
+            Move move = Move(row, column, row + change, column-1);
+            moves.push_back(move);
+        }
+
     }
 
     // Move two steps forward
@@ -201,7 +231,7 @@ void MoveGenerator::generatePawnMoves(pair<int, int> square) {
        Piece::color(board[row][column-1])!=friendlyColor){
         Move move = Move(row, column, row + change, column-1);
         // Opponent's Pawn disappears
-        move.secondaryMove = new Move(row, column+1, row, column-1);
+        move.secondaryMove = new Move(row, column-1, row, column-1);
         moves.push_back(move);
     }
 }

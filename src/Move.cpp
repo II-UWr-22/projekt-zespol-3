@@ -7,6 +7,13 @@ Move::Move(string &move) {
 void Move::stringMoveToCords(string &move) {
     startingSquare = {7-(move[1]-'1'), charToCol(move[0])};
     targetSquare = {7-(move[3]-'1'), charToCol(move[2])};
+    if(move.length() == 5){
+        promotion = Piece::pieceSymbol.at(move[4]);
+        if(targetSquare.second == 7)
+            promotion |= Piece::Black;
+        else
+            promotion |= Piece::White;
+    }
 }
 
 Move::Move(pair<int, int> start, pair<int, int> end) {
@@ -29,6 +36,24 @@ string Move::toString() {
     res[1] = ('8'-startingSquare.first);
     res[2] = (targetSquare.second + 'a');
     res[3] = ('8'-targetSquare.first);
+    if(promotion != Piece::None){
+        char p;
+        switch(Piece::pieceType(promotion)){
+            case Piece::Bishop:
+                p = 'b';
+                break;
+            case Piece::Knight:
+                p = 'n';
+                break;
+            case Piece::Queen:
+                p = 'q';
+                break;
+            case Piece::Rook:
+                p = 'r';
+                break;
+        }
+        res += p;
+    }
     return res;
 }
 
@@ -36,4 +61,5 @@ Move::Move(const Move &other) {
     startingSquare = other.startingSquare;
     targetSquare = other.targetSquare;
     secondaryMove = other.secondaryMove;
+    promotion = other.promotion;
 }

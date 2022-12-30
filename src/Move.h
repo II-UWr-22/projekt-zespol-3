@@ -2,6 +2,7 @@
 #define MOVE_H
 
 #include <string>
+#include "Piece.h"
 using std::pair;
 using std::string;
 class Move{
@@ -12,6 +13,7 @@ public:
     // for castling and En Passant
     Move* secondaryMove = nullptr;
 
+    int promotion = Piece::None;
 
     pair<int,int> startingSquare;
     pair<int,int> targetSquare;
