@@ -1,26 +1,38 @@
 #include "Bot.h"
 #include <limits.h>
 #include <algorithm>
+#include <ctime>
 
 int Bot::evalPosition(Board &board) {
     int res = 0;
     for(int i=0; i<8; i++){
         for(int j=0; j<8; j++){
             if(Piece::color(board[i][j]) == board.colorToMove){
-                res += value[Piece::pieceType(board[i][j])];
+                res += value[Piece::pieceType(board[i][j])]*1000;
             }
             else{
-                res -= value[Piece::pieceType(board[i][j])];
+                res -= value[Piece::pieceType(board[i][j])]*1000;
             }
         }
     }
-    res *= 1000;
+
     vector<Move> legalMoves = generator.generateMoves(board);
-    res += (int)legalMoves.size();
+    for(auto m : legalMoves){
+        if(Piece::pieceType(board[m.startingSquare.first][m.startingSquare.second]) == Piece::Knight){
+            res += 3;
+        }
+        if(Piece::pieceType(board[m.startingSquare.first][m.startingSquare.second]) == Piece::Bishop){
+            res += 3;
+        }
+        if(Piece::pieceType(board[m.startingSquare.first][m.startingSquare.second]) == Piece::Queen){
+            res += 1;
+        }
+        res++;
+    }
     return res;
 }
 
-int Bot::defense(Board board, int depth){
+int Bot::defense(Board &board, int depth){
     vector<Move> legalMoves = generator.generateMoves(board);
     int best = INT_MAX;
     for(auto m : legalMoves){
@@ -52,7 +64,7 @@ int Bot::defense(Board board, int depth){
 //     }
 // }
 
-int Bot::attack(Board board, int depth){
+int Bot::attack(Board &board, int depth){
     if(depth == 0){
         return evalPosition(board);
     }
@@ -76,8 +88,8 @@ int Bot::attack(Board board, int depth){
 }
 
 Move Bot::bestMove(Board board) {
-    int depth = 6;
-    for(int i=0; i<10; i++){
+    int depth = 10;
+    for(int i=0; i<(int)alt.size(); i++){
         if(i&1){
             alt[i] = INT_MAX;
         }
@@ -86,6 +98,8 @@ Move Bot::bestMove(Board board) {
         }
     }
     vector<Move> legalMoves = generator.generateMoves(board);
+    srand(time(0));
+    random_shuffle(legalMoves.begin(), legalMoves.end());
     pair<Move, int> best = std::make_pair(Move(), INT_MIN);
     for(auto m : legalMoves){
         auto new_board = board;
