@@ -17,103 +17,63 @@ int Bot::evalPosition(Board &board) {
     }
 
     vector<Move> legalMoves = generator.generateMoves(board);
-    for(auto m : legalMoves){
-        if(Piece::pieceType(board[m.startingSquare.first][m.startingSquare.second]) == Piece::Knight){
-            res += 3;
-        }
-        if(Piece::pieceType(board[m.startingSquare.first][m.startingSquare.second]) == Piece::Bishop){
-            res += 3;
-        }
-        if(Piece::pieceType(board[m.startingSquare.first][m.startingSquare.second]) == Piece::Queen){
-            res += 1;
-        }
-        res++;
-    }
+    res += (int)legalMoves.size();
     return res;
 }
 
-int Bot::defense(Board &board, int depth){
+int Bot::defense(Board &board, int depth, int alpha){
     vector<Move> legalMoves = generator.generateMoves(board);
-    int best = INT_MAX;
+    int beta = INT_MAX;
     for(auto m : legalMoves){
         auto new_board = board;
         new_board.makeMove(m);
-        auto score = attack(new_board, depth-1);
-        if(score < best){
-            best = score;
-            if(best < alt[depth]){
-                alt[depth] = best;
-            }
-            if(best < alt[depth+1]){
-                return best;
-            }
+        auto score = attack(new_board, depth-1, beta);
+        if(score < beta){
+            beta = score;
+        }
+        if(beta <= alpha){
+            break;
         }
     }
-    return best;
+    return beta;
 }
 
-// void debugBoard(Board board) {
-//     for(int i =0; i < 8; i++){
-//         for(int j =0; j < 8; j++){
-//             if(board[i][j])
-//                 std::cout << board[i][j] << ' ';
-//             else
-//                 std::cout << "00" << ' ';
-//         }
-//         std::cout << '\n';
-//     }
-// }
-
-int Bot::attack(Board &board, int depth){
+int Bot::attack(Board &board, int depth, int beta){
     if(depth == 0){
         return evalPosition(board);
     }
     vector<Move> legalMoves = generator.generateMoves(board);
-    int best = INT_MIN;
+    int alpha = INT_MIN;
     for(auto m : legalMoves){
         auto new_board = board;
         new_board.makeMove(m);
-        auto score = defense(new_board, depth-1);
-        if(score > best){
-            best = score;
-            if(best > alt[depth]){
-                alt[depth] = best;
-            }
-            if(best > alt[depth+1]){
-                return best;
-            }
+        auto score = defense(new_board, depth-1, alpha);
+        if(score > alpha){
+            alpha = score;
+        }
+        if(alpha >= beta){
+            break;
         }
     }
-    return best;
+    return alpha;
 }
 
 Move Bot::bestMove(Board board) {
-    int depth = 10;
-    for(int i=0; i<(int)alt.size(); i++){
-        if(i&1){
-            alt[i] = INT_MAX;
-        }
-        else{
-            alt[i] = INT_MIN;
-        }
-    }
+    int depth = 4, alpha = INT_MIN;
     vector<Move> legalMoves = generator.generateMoves(board);
     srand(time(0));
     random_shuffle(legalMoves.begin(), legalMoves.end());
-    pair<Move, int> best = std::make_pair(Move(), INT_MIN);
+    Move best = Move();
     for(auto m : legalMoves){
         auto new_board = board;
         new_board.makeMove(m);
-        auto score = defense(new_board, depth-1);
-        //std::cout << "ruch: " << m.toString() << ": " << score << "\n";
-        if(score > best.second){
-            best = std::make_pair(m, score);
-            if(best.second > alt[depth]){
-                alt[depth] = best.second;
-            }
+        auto score = defense(new_board, depth-1, alpha);
+        if(score > alpha){
+            alpha = score;
+            best = m;
         }
     }
-    return best.first;
+    return best;
 }
 
 Bot::Bot() {
