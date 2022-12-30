@@ -3,16 +3,19 @@
 ChessGame::ChessGame() {
     _board = Board();
     _bot = Bot();
+    _generator = MoveGenerator();
 }
 
 ChessGame::~ChessGame() {
 
 }
 
-void ChessGame::makeMove(std::string move) {
-    Move m = Move(move);
-    _board.makeMove(m);
-
+void ChessGame::makeMove(std::string& move) {
+    vector<Move> moves = _generator.generateMoves(_board);
+    for(auto mv : moves){
+        if(mv.toString() == move)
+            _board.makeMove(mv);
+    }
 }
 
 string ChessGame::getMove() {

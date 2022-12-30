@@ -30,10 +30,9 @@ void MoveGenerator::generateKingMoves(pair<int, int> square) {
     !isSquareThreatened({castling_row, 5}, board))
     {
         Move move = Move(castling_row,4,castling_row,6);
-        moves.push_back(move);
         // Move Rook
-        Move s_move = Move(castling_row,7,castling_row, 5);
-        move.secondaryMove = &s_move;
+        move.secondaryMove = new Move(castling_row,7,castling_row, 5);;
+        moves.push_back(move);
     }
 
     // Long castling
@@ -44,10 +43,9 @@ void MoveGenerator::generateKingMoves(pair<int, int> square) {
     !isSquareThreatened({castling_row, 4}, board))
     {
         Move move = Move(castling_row,4,castling_row,2);
-        moves.push_back(move);
         // Move Rook
-        Move s_move = Move(castling_row, 0, castling_row, 3);
-        move.secondaryMove = &s_move;
+        move.secondaryMove = new Move(castling_row, 0, castling_row, 3);
+        moves.push_back(move);
     }
 }
 
@@ -180,7 +178,7 @@ void MoveGenerator::generatePawnMoves(pair<int, int> square) {
 
     // Move two steps forward
     if(inBounds({row+2*change, column}) && board[row+2*change][column] == Piece::None &&
-       board[row+1*change][column] == Piece::None) {
+       board[row+1*change][column] == Piece::None && !board.hasMoved[row][column]) {
         Move move = Move(row, column, row + 2*change, column);
         moves.push_back(move);
     }
@@ -191,10 +189,9 @@ void MoveGenerator::generatePawnMoves(pair<int, int> square) {
        Piece::pieceType(board[row][column+1])==Piece::Pawn && 
        Piece::color(board[row][column+1])!=friendlyColor){
         Move move = Move(row, column, row + change, column+1);
-        moves.push_back(move);
         // Opponent's Pawn disappears
-        Move s_move = Move(row, column+1, row, column+1);
-        move.secondaryMove = &s_move;
+        move.secondaryMove = new Move(row, column+1, row, column+1);
+        moves.push_back(move);
     }
 
     // En Passant 2 
@@ -203,10 +200,9 @@ void MoveGenerator::generatePawnMoves(pair<int, int> square) {
        Piece::pieceType(board[row][column-1])==Piece::Pawn && 
        Piece::color(board[row][column-1])!=friendlyColor){
         Move move = Move(row, column, row + change, column-1);
-        moves.push_back(move);
         // Opponent's Pawn disappears
-        Move s_move = Move(row, column-1, row, column-1);
-        move.secondaryMove = &s_move;
+        move.secondaryMove = new Move(row, column+1, row, column-1);
+        moves.push_back(move);
     }
 }
 

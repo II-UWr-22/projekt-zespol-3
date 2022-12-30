@@ -5,7 +5,6 @@ int main()
     ChessGame game = ChessGame();
     while(1){
         game.debugBoard();
-
         std::string move;
         std::cin >> move;
         game.makeMove(move);
@@ -14,3 +13,5 @@ int main()
         game.makeMove(response);
     }
 }
+
+

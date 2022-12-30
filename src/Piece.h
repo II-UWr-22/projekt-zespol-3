@@ -1,3 +1,6 @@
+#ifndef PIECE_H
+#define PIECE_H
+
 #include <map>
 using std::map;
 
@@ -47,3 +50,5 @@ public:
     static bool isSlidingPiece(int piece);
 
 };
+
+#endif

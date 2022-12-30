@@ -1,3 +1,6 @@
+#ifndef BOARD_H
+#define BOARD_H
+
 #include <array>
 #include "Move.h"
 #include <string>
@@ -27,3 +30,5 @@ public:
 
     array<int,8> operator[](int row);
 };
+
+#endif

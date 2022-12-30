@@ -18,7 +18,6 @@ void Board::makeMove(Move& move) {
     _board[move.targetSquare.first][move.targetSquare.second] =
             _board[move.startingSquare.first][move.startingSquare.second];
     _board[move.startingSquare.first][move.startingSquare.second] = Piece::None;
-
     if(move.secondaryMove != nullptr){
         _board[move.secondaryMove->targetSquare.first][move.secondaryMove->targetSquare.second] =
                 _board[move.secondaryMove->startingSquare.first][move.secondaryMove->startingSquare.second];
@@ -27,6 +26,7 @@ void Board::makeMove(Move& move) {
     colorToMove = colorToMove == Piece::White ? Piece::Black : Piece::White;
     lastMove = move;
     hasMoved[move.startingSquare.first][move.startingSquare.second] = true;
+    hasMoved[move.targetSquare.first][move.targetSquare.second] = true;
 }
 
 void Board::loadPositionFromFen(const string& fen) {

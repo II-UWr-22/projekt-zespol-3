@@ -1,6 +1,11 @@
+#ifndef MOVE_GENERATOR_H
+#define MOVE_GENERATOR_H
+
 #include "Board.h"
+#include "Move.h"
 #include <vector>
 
+using std::pair;
 using std::vector;
 
 class MoveGenerator {
@@ -30,4 +35,4 @@ public:
 
 };
 
-
+#endif

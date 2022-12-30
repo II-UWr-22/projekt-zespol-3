@@ -1,3 +1,6 @@
+#ifndef MOVE_H
+#define MOVE_H
+
 #include <string>
 using std::pair;
 using std::string;
@@ -21,3 +24,5 @@ public:
 
     string toString();
 };
+
+#endif
